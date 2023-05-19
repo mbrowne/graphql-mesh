@@ -307,6 +307,13 @@ export default class GrpcHandler implements MeshHandler {
     objPath: string;
     creds: ChannelCredentials;
   }) {
+    if (!grpcObject) {
+      throw new Error(
+        'Protobuf metadata not found in the GraphQL schema or is corrupted. ' +
+          'The gRPC handler only accepts GraphQL schema files generated using GraphQL Mesh.',
+      );
+    }
+
     let serviceClientByObjPath = this.grpcObjectByserviceClientByObjPath.get(grpcObject);
     if (!serviceClientByObjPath) {
       serviceClientByObjPath = new Map<string, ServiceClient>();
