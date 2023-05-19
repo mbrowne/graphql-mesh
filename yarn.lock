@@ -11190,7 +11190,7 @@ gray-matter@^4.0.3:
     section-matter "^1.0.0"
     strip-bom-string "^1.0.0"
 
-grpc-node-server-reflection@1.0.2:
+grpc-node-server-reflection@1.0.2, grpc-node-server-reflection@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/grpc-node-server-reflection/-/grpc-node-server-reflection-1.0.2.tgz#ebebb104f16f028cb0407d57f100760dd4425af5"
   integrity sha512-cHEHawsoL2HPZ8Q70i5vS8FU4yfFMDIVfHUU9iZehCjLrc4zb3LRVs5fGqQoJalefs46BAnICxYExkelXZG74w==

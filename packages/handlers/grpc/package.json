@@ -51,7 +51,8 @@
     "protobufjs": "7.2.3"
   },
   "devDependencies": {
-    "@types/lodash.has": "4.5.7"
+    "@types/lodash.has": "4.5.7",
+    "grpc-node-server-reflection": "^1.0.2"
   },
   "publishConfig": {
     "access": "public",

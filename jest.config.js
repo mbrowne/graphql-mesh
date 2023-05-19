@@ -16,7 +16,12 @@ if (process.env.LEAK_TEST) {
   testMatch.push('!**/examples/mysql-*/**');
 }
 
-testMatch.push(process.env.INTEGRATION_TEST ? '!**/packages/**' : '!**/examples/**');
+const testPathIgnorePatterns = ['/node_modules/'];
+testPathIgnorePatterns.push(
+  process.env.INTEGRATION_TEST
+    ? '^/packages/(^/test/integration/)'
+    : '(^/examples/)|(test/integration/)',
+);
 
 module.exports = {
   testEnvironment: 'node',
@@ -41,4 +46,5 @@ module.exports = {
   },
   resolver: 'bob-the-bundler/jest-resolver',
   testMatch,
+  testPathIgnorePatterns,
 };
