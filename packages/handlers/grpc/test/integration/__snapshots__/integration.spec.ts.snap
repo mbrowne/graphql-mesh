@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`gRPC Handler integration tests Load protobuf via reflection 1`] = `
+"directive @grpcMethod(rootJsonName: String, objPath: String, methodName: String, responseStream: Boolean) on FIELD_DEFINITION
+
+directive @grpcConnectivityState(rootJsonName: String, objPath: String) on FIELD_DEFINITION
+
+directive @grpcRootJson(name: String, rootJson: ObjMap, loadOptions: ObjMap) repeatable on OBJECT
+
+type Query {
+  foo_SampleService_GetSample(input: foo_GetSampleRequest_Input): foo_SampleResponse
+  foo_SampleService_connectivityState(tryToConnect: Boolean): ConnectivityState
+  io_xtech_Example_GetMovies(input: io_xtech_MovieRequest_Input): io_xtech_MoviesResult
+  io_xtech_Example_GetEmpty(input: io_xtech_MovieRequest_Input): io_xtech_EmptyRequest
+  io_xtech_Example_SearchMoviesByCast(input: io_xtech_SearchByCastRequest_Input): [io_xtech_Movie]
+  io_xtech_Example_connectivityState(tryToConnect: Boolean): ConnectivityState
+  io_xtech_AnotherExample_GetMovies(input: io_xtech_MovieRequest_Input): io_xtech_MoviesResult
+  io_xtech_AnotherExample_SearchMoviesByCast(input: io_xtech_SearchByCastRequest_Input): [io_xtech_Movie]
+  io_xtech_AnotherExample_connectivityState(tryToConnect: Boolean): ConnectivityState
+}
+
+type foo_SampleResponse {
+  sampleId: String
+}
+
+input foo_GetSampleRequest_Input {
+  sampleId: String
+}
+
+enum ConnectivityState {
+  IDLE
+  CONNECTING
+  READY
+  TRANSIENT_FAILURE
+  SHUTDOWN
+}
+
+type io_xtech_MoviesResult {
+  result: [io_xtech_Movie]
+}
+
+type io_xtech_Movie {
+  name: String
+  year: Int
+  rating: Float
+  cast: [String]
+  time: google_protobuf_Timestamp
+  genre: io_xtech_Genre
+}
+
+type google_protobuf_Timestamp {
+  seconds: BigInt
+  nanos: Int
+}
+
+"""
+The \`BigInt\` scalar type represents non-fractional signed whole numeric values.
+"""
+scalar BigInt
+
+enum io_xtech_Genre {
+  UNSPECIFIED
+  ACTION
+  DRAMA
+}
+
+input io_xtech_MovieRequest_Input {
+  movie: io_xtech_Movie_Input
+}
+
+input io_xtech_Movie_Input {
+  name: String
+  year: Int
+  rating: Float
+  cast: [String]
+  time: google_protobuf_Timestamp_Input
+  genre: io_xtech_Genre
+}
+
+input google_protobuf_Timestamp_Input {
+  seconds: BigInt
+  nanos: Int
+}
+
+scalar io_xtech_EmptyRequest @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+input io_xtech_SearchByCastRequest_Input {
+  castName: String
+}
+
+type Mutation {
+  foo_SampleService_CreateSample(input: foo_CreateSampleRequest_Input): foo_SampleResponse
+  foo_SampleService_UpdateSample(input: foo_UpdateSampleRequest_Input): foo_SampleResponse
+  foo_SampleService_DeleteSample(input: foo_DeleteSampleRequest_Input): foo_SampleResponse
+}
+
+input foo_CreateSampleRequest_Input {
+  description: String
+  type: String
+}
+
+input foo_UpdateSampleRequest_Input {
+  sampleId: String
+}
+
+input foo_DeleteSampleRequest_Input {
+  sampleId: String
+}
+
+scalar ObjMap"
+`;

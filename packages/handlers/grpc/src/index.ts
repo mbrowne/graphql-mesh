@@ -7,7 +7,11 @@ import {
   GraphQLSchema,
   specifiedDirectives,
 } from 'graphql';
-import { ObjectTypeComposerFieldConfigAsObjectDefinition, SchemaComposer } from 'graphql-compose';
+import {
+  Directive,
+  ObjectTypeComposerFieldConfigAsObjectDefinition,
+  SchemaComposer,
+} from 'graphql-compose';
 import {
   GraphQLBigInt,
   GraphQLByte,
@@ -368,6 +372,7 @@ export default class GrpcHandler implements MeshHandler {
   processDirectives({ schema, creds }: { schema: GraphQLSchema; creds: ChannelCredentials }) {
     const queryType = schema.getQueryType();
     const rootJsonAnnotations = getDirective(schema, queryType, 'grpcRootJson');
+
     const rootJsonMap = new Map<string, protobufjs.INamespace>();
     const grpcObjectByRootJsonName = new Map<string, ReturnType<typeof loadPackageDefinition>>();
     for (const { name, rootJson, loadOptions } of rootJsonAnnotations) {
@@ -671,6 +676,8 @@ export default class GrpcHandler implements MeshHandler {
       this.logger.debug(`Getting stored root and decoded descriptor set objects`);
       const descriptorSets = await this.getDescriptorSets(creds);
 
+      const rootJsonDirectives: Directive[] = [];
+
       for (const { name: rootJsonName, rootJson } of descriptorSets) {
         const rootLogger = this.logger.child(rootJsonName);
 
@@ -691,18 +698,24 @@ export default class GrpcHandler implements MeshHandler {
           loadOptions,
         });
 
-        this.schemaComposer.addDirective(grpcRootJsonDirective);
-        this.schemaComposer.Query.setDirectiveByName('grpcRootJson', {
-          name: rootJsonName,
-          rootJson,
+        rootJsonDirectives.push({
+          name: 'grpcRootJson',
+          args: {
+            name: rootJsonName,
+            rootJson,
+          },
         });
       }
+
+      this.schemaComposer.addDirective(grpcRootJsonDirective);
+      this.schemaComposer.Query.setDirectives(rootJsonDirectives);
 
       // graphql-compose doesn't add @defer and @stream to the schema
       specifiedDirectives.forEach(directive => this.schemaComposer.addDirective(directive));
 
       this.logger.debug(`Building the final GraphQL Schema`);
       const schema = this.schemaComposer.buildSchema();
+
       return schema;
     });
   }
